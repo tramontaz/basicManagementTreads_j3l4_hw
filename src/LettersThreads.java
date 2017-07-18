@@ -1,32 +1,53 @@
 public class LettersThreads {
     private final Object monitor = new Object();
-    private volatile char currentLetter = 'C';
+    private volatile char currentLetter = 'A';
 
-    public void printLetter(){
-        synchronized (monitor){
+    public void printA() {
+        synchronized (monitor) {
             try {
-                for (int i = 0; i < 7; i++) {
-                    switch (currentLetter){
-                        case 'A' :
-                            currentLetter = 'B';
-                            System.out.print(currentLetter);
-                            monitor.notifyAll();
-                            break;
-                        case 'B' :
-                            currentLetter = 'C';
-                            System.out.print(currentLetter);
-                            monitor.notifyAll();
-                            break;
-                        case 'C' :
-                            System.out.print(" ");
-                            currentLetter = 'A';
-                            System.out.print(currentLetter);
-                            monitor.notify();
-                            break;
+                for (int i = 0; i < 5; i++) {
+                    while (currentLetter != 'A' && currentLetter != 'B') {
+                        monitor.wait();
                     }
-                    monitor.wait();
+                    System.out.print('A');
+                    currentLetter = 'B';
+                    monitor.notify();
                 }
-            } catch (InterruptedException e){
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void printB() {
+        synchronized (monitor) {
+            try {
+                for (int i = 0; i < 5; i++) {
+                    while (currentLetter != 'B' && currentLetter != 'C') {
+                        monitor.wait();
+                    }
+                    System.out.print('B');
+                    currentLetter = 'C';
+                    monitor.notify();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void printC() {
+        synchronized (monitor) {
+            try {
+                for (int i = 0; i < 5; i++) {
+                    while (currentLetter != 'C' && currentLetter != 'A') {
+                        monitor.wait();
+                    }
+                    System.out.print('C');
+                    currentLetter = 'A';
+                    monitor.notify();
+                }
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
