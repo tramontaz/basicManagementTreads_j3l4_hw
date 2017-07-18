@@ -6,6 +6,32 @@ public class Main {
     public static void main(String[] args) {
 //        taskOne();
 //        taskTwo();
+        taskThree();
+    }
+
+    private static void taskThree() {
+        MFIs mfIs = new MFIs();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mfIs.printSomething(true);
+            }
+        });
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mfIs.scanSomething(true);
+            }
+        });
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mfIs.printSomething(true);
+            }
+        });
+        t1.start();
+        t2.start();
+//        t3.start(); //if you try start it, you will get a message "i'm busy"
     }
 
     private static void taskTwo() {
